@@ -11,8 +11,8 @@ public class TestWatcher : MonoBehaviour
 
     FileSystemWatcher watcher;
     ConcurrentQueue<string> fileQueue = new ConcurrentQueue<string>();
-    public List<SpawnMapping> fishPrefabs;
-    public List<SpawnMapping> trashPrefabs;
+    public GameObject fishPrefab;
+    public GameObject trashPrefab;
     public Vector2 spawnMin;
     public Vector2 spawnMax;
     
@@ -88,9 +88,9 @@ public class TestWatcher : MonoBehaviour
         //get prefabs
         GameObject prefab = null;
         if (category == "FISH")
-            prefab = GetPrefab(type, fishPrefabs);
+            prefab = fishPrefab;
         else if (category == "TRASH")
-            prefab = GetPrefab(type, trashPrefabs);
+            prefab = trashPrefab;
         if (prefab == null)
         {
             Debug.LogWarning("Prefabs tidak ditemukan");
@@ -121,10 +121,10 @@ public class TestWatcher : MonoBehaviour
         );
     }
 
-    GameObject GetPrefab(string type, List<SpawnMapping> list)
-    {
-        return list.Find(x => x.type == type)?.prefab;
-    }
+    // GameObject GetPrefab(string type, List<SpawnMapping> list)
+    // {
+    //     return list.Find(x => x.type == type)?.prefab;
+    // }
     bool IsPositionFree(Vector2 pos, float radius)
     {
         return Physics2D.OverlapCircle(pos, radius) == null;
