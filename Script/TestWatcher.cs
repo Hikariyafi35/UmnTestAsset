@@ -25,6 +25,8 @@ public class TestWatcher : MonoBehaviour
 
         watcher.Created += OnFileCreated;
         watcher.EnableRaisingEvents = true;
+
+        ScanExistingFiles();
         Debug.Log("watcher aktif");
     }
     private void Update()
@@ -128,6 +130,16 @@ public class TestWatcher : MonoBehaviour
     bool IsPositionFree(Vector2 pos, float radius)
     {
         return Physics2D.OverlapCircle(pos, radius) == null;
+    }
+    void ScanExistingFiles()
+    {
+        if (!Directory.Exists(folderPath)) return;
+        string[] files = Directory.GetFiles(folderPath, "*.png");
+        foreach (string file in files)
+        {
+            fileQueue.Enqueue(file);
+        }
+        Debug.Log("Scan selesai, " + files.Length + " file ditemukan");
     }
 }
 
