@@ -6,9 +6,10 @@ public class Interaction : MonoBehaviour
     [Header("Food Prefab")]
     public GameObject foodPrefab;
 
-    [Header("Block Spawn Layer")]
-    public LayerMask blockedLayer; // ikan / UI / object lain
-    public LayerMask trashLayer; // tempat sampah
+    [Header("Layer")]
+    public LayerMask blockedLayer;
+    public LayerMask trashLayer;
+    public LayerMask fishLayer;
 
     private Camera cam;
 
@@ -32,16 +33,29 @@ public class Interaction : MonoBehaviour
         Vector2 mousePos = Mouse.current.position.ReadValue();
         Vector2 worldPos = cam.ScreenToWorldPoint(mousePos);
 
-        // 1. Jika klik sampah -> destroy
-        Collider2D waste = Physics2D.OverlapPoint(worldPos, trashLayer);
+        // 1. Klik Fish = takut / kabur
+        Collider2D fishHit = Physics2D.OverlapPoint(worldPos, fishLayer);
 
-        if (waste != null)
+        if (fishHit != null)
         {
-            Destroy(waste.gameObject);
+            FishMovement fish = fishHit.GetComponent<FishMovement>();
+
+            if (fish != null)
+                fish.Scare(worldPos);
+
             return;
         }
 
-        // 2. Jika tempat kosong -> spawn food
+        // 2. Klik Trash = destroy
+        Collider2D trashHit = Physics2D.OverlapPoint(worldPos, trashLayer);
+
+        if (trashHit != null)
+        {
+            Destroy(trashHit.gameObject);
+            return;
+        }
+
+        // 3. Tempat kosong = spawn food
         Collider2D blocked = Physics2D.OverlapPoint(worldPos, blockedLayer);
 
         if (blocked == null)

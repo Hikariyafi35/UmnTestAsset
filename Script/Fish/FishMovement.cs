@@ -11,11 +11,18 @@ public class FishMovement : MonoBehaviour
     public float maxSpeed = 3f;
 
     [Header("Feeding")]
-    public float detectionRadius = 5f;
+    public float detectionRadius = 15f;
     public LayerMask foodLayer;
+
+    [Header("Scare")]
+    public float scareSpeedMultiplier = 2f;
+    public float scareDuration = 2f;
 
     private Vector2 moveDir;
     private float speed;
+
+    private float scareTimer = 0f;
+    public float scareForce = 8f;
 
     private Transform targetFood;
     private Hunger hunger;
@@ -29,22 +36,48 @@ public class FishMovement : MonoBehaviour
 
     private void Start()
     {
+        minSpeed = ConfigManager.Data.fishMinSpeed;
+        maxSpeed = ConfigManager.Data.fishMaxSpeed;
+        detectionRadius = ConfigManager.Data.fishDetectionRadius;
+        scareDuration = ConfigManager.Data.fishScareDuration;
+        scareSpeedMultiplier = ConfigManager.Data.fishScareSpeedMultiplier;
+        scareForce = ConfigManager.Data.scareForce;
         RandomSwim();
     }
 
     private void Update()
     {
         FlipSprite();
+
+        if (scareTimer > 0)
+            scareTimer -= Time.deltaTime;
     }
 
     private void FixedUpdate()
     {
-        if (hunger != null && hunger.IsHungry())
+        if (scareTimer <= 0)
         {
-            Feeding();
+            if (hunger != null && hunger.IsHungry())
+                Feeding();
         }
 
         rb.linearVelocity = moveDir * speed;
+    }
+
+    public void Scare(Vector2 clickPos)
+    {
+        Vector2 fleeDir = ((Vector2)transform.position - clickPos).normalized;
+
+        // reset gerakan lama
+        rb.linearVelocity = Vector2.zero;
+        // dorong kabur
+        rb.AddForce(fleeDir * scareForce, ForceMode2D.Impulse);
+
+        moveDir = fleeDir;
+        speed = maxSpeed * scareSpeedMultiplier;
+        scareTimer = scareDuration;
+
+        targetFood = null;
     }
 
     void Feeding()

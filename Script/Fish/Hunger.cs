@@ -10,6 +10,11 @@ public class Hunger : MonoBehaviour
 
     private float cooldownTimer;
 
+    private void Start() 
+    {
+        hungerDecreasePerSecond = ConfigManager.Data.hungerDecreasePerSecond;
+        hungerCooldown = ConfigManager.Data.hungerCooldown;
+    }
     private void Update()
     {
         if (hungerMeter >= 100)

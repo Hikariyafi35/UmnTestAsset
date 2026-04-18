@@ -182,10 +182,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishMovement
   minSpeed: 1.5
   maxSpeed: 3.5
-  detectionRadius: 14.88
+  detectionRadius: 15
   foodLayer:
     serializedVersion: 2
     m_Bits: 256
+  scareSpeedMultiplier: 6
+  scareDuration: 2
 --- !u!114 &4147259705599773390
 MonoBehaviour:
   m_ObjectHideFlags: 0
