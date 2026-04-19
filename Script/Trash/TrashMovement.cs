@@ -27,6 +27,7 @@ public class TrashMovement : MonoBehaviour
 
     private void Start()
     {
+        pushForce = ConfigManager.Data.pushForce;
         PickDirection();
     }
 

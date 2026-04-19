@@ -45,6 +45,8 @@ public class ConfigData
 
     public float foodFallSpeed = 1.5f;
 
+    public float pushForce = 2f;
+
     public float masterVolume = 1f;
     public float fishClickVolume = 0.8f;
     public float fishEatVolume = 0.7f;
