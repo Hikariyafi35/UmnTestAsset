@@ -1,10 +1,12 @@
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 [RequireComponent(typeof(Rigidbody2D))]
 public class FishMovement : MonoBehaviour
 {
     private Rigidbody2D rb;
     private SpriteRenderer sr;
+    private AudioSource audioSource;
 
     [Header("Swim")]
     public float minSpeed = 1.5f;
@@ -17,6 +19,10 @@ public class FishMovement : MonoBehaviour
     [Header("Scare")]
     public float scareSpeedMultiplier = 2f;
     public float scareDuration = 2f;
+
+    [Header("SFX")]
+    public AudioClip clickFishSfx;
+    public AudioClip eatFoodSfx;
 
     private Vector2 moveDir;
     private float speed;
@@ -32,6 +38,7 @@ public class FishMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         hunger = GetComponent<Hunger>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Start()
@@ -78,6 +85,7 @@ public class FishMovement : MonoBehaviour
         scareTimer = scareDuration;
 
         targetFood = null;
+        PlayClickSfx();
     }
 
     void Feeding()
@@ -127,6 +135,7 @@ public class FishMovement : MonoBehaviour
                 hunger.EatFood();
 
             targetFood = null;
+            PlayEatSfx();
         }
     }
 
@@ -138,6 +147,26 @@ public class FishMovement : MonoBehaviour
         moveDir.Normalize();
 
         targetFood = null;
+    }
+    void PlayClickSfx()
+    {
+        if (clickFishSfx == null) return;
+
+        float finalVolume =
+            ConfigManager.Data.masterVolume *
+            ConfigManager.Data.fishClickVolume;
+
+        audioSource.PlayOneShot(clickFishSfx, finalVolume);
+    }
+    void PlayEatSfx()
+    {
+        if (eatFoodSfx == null) return;
+
+        float volume =
+            ConfigManager.Data.masterVolume *
+            ConfigManager.Data.fishEatVolume;
+
+        audioSource.PlayOneShot(eatFoodSfx, volume);
     }
 
     void RandomSwim()

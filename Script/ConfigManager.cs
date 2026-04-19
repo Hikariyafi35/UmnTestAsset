@@ -4,6 +4,7 @@ using UnityEngine;
 public class ConfigManager : MonoBehaviour
 {
     public static ConfigData Data;
+    public string watchFolder = "";
 
     void Awake()
     {
@@ -31,6 +32,7 @@ public class ConfigManager : MonoBehaviour
 [System.Serializable]
 public class ConfigData
 {
+    public string watchFolder = "";
     public float fishMinSpeed = 1.5f;
     public float fishMaxSpeed = 3f;
     public float fishDetectionRadius = 15f;
@@ -42,4 +44,8 @@ public class ConfigData
     public float hungerCooldown = 5f;
 
     public float foodFallSpeed = 1.5f;
+
+    public float masterVolume = 1f;
+    public float fishClickVolume = 0.8f;
+    public float fishEatVolume = 0.7f;
 }

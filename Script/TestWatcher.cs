@@ -18,6 +18,19 @@ public class TestWatcher : MonoBehaviour
     
     private void Start()
     {
+        folderPath = ConfigManager.Data.watchFolder;
+        // kalau kosong, pakai folder default
+        if (string.IsNullOrWhiteSpace(folderPath))
+        {
+            folderPath = Path.Combine(Application.dataPath, "../InputFolder");
+        }
+
+        // kalau folder belum ada, buatkan
+        if (!Directory.Exists(folderPath))
+        {
+            Directory.CreateDirectory(folderPath);
+        }
+
         watcher = new FileSystemWatcher();
 
         watcher.Path = folderPath;
@@ -85,7 +98,7 @@ public class TestWatcher : MonoBehaviour
         Sprite sprite = Sprite.Create(
             tex,
             new Rect(0, 0, tex.width, tex.height),
-            new Vector2(0.5f, 0.5f)
+            new Vector2(0.5f, 0.5f),150f
             );
         //get prefabs
         GameObject prefab = null;
